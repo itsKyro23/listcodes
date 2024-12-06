@@ -1,5 +1,5 @@
 [{"name":"Coupon 1",
-  "update":"1 December",
+  "update":"1 Dec",
   "coupon":[
   "TGS24STARSEED",
   "SIAXFREYJA",
@@ -70,7 +70,7 @@
   "DANESTARSEED22"
 ]},{
   "name":"Coupon 2",
-  "update":"4 December",
+  "update":"4 Dec",
   "coupon":["STARS13EAT3R",
   "GAVRISTARS30",
   "13STARSFOX",
@@ -84,7 +84,7 @@
   "S201111STAR"]
 },{
   "name":"Coupon 3",
-  "update":"6 December, Expired 12/7",
+  "update":"6 Dec, Expired 7 Dec ",
   "coupon":["FREESTARBIT",
   "PLUGIN10",
   "STARSEEDXGIFT"]}
