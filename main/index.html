@@ -1,1 +1,81 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>STAR SEED Coupon</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 400px;
+      padding: 20px;
+      text-align: center;
+    }
+    .card h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .input-container {
+      margin-bottom: 20px;
+    }
+    .input-container input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .button {
+      background: #007BFF;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .button:hover {
+      background: #0056b3;
+    }
+    .result {
+      margin-top: 10px;
+      font-size: 14px;
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h1>Redeem Star Seed Coupon</h1>
+      <div class="input-container">
+        <input type="text" id="couponInput" placeholder="Enter coupon codes (comma-separated)" />
+      </div>
+      <button class="button" id="redeemButton">Redeem</button>
+      <p class="result" id="result"></p>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
