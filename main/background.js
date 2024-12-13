@@ -1,10 +1,11 @@
+const cors_api_url = 'https://proxy.cors.sh';
 // URL JSON yang berisi kupon
-const jsonUrl = 'https://cors-anywhere.herokuapp.com/https://github.com/itsKyro23/listcodes/raw/main/starseed2.json'; // Gantilah dengan URL JSON yang sesuai
+const jsonUrl= 'https://cors-anywhere.herokuapp.com//https://github.com/itsKyro23/listcodes/raw/main/starseed2.json'; // Gantilah dengan URL JSON yang sesuai
 
 // Fungsi untuk mendapatkan Page-Key
 async function getPageKey() {
   const pattern = /'Page-Key':\s*'([a-zA-Z0-9]*)'/i;
-  const cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+  
 
   let pageKey;
   try {
