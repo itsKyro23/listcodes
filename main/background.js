@@ -89,15 +89,15 @@ async function populateCouponSelect() {
     const couponData = await getCouponsFromJSON();
     const couponSelect = document.getElementById('couponSelect');
 
-    // Menambahkan semua kupon ke dropdown
-    couponData.forEach(couponSet => {
-      couponSet.coupon.forEach(coupon => {
-        const option = document.createElement('option');
-        const couponList = couponSet.coupon.join(', ');
-      option.value = couponList;
-      option.textContent = `${couponSet.name} (${couponSet.update}) - ${couponList}`;
-      couponSelect.appendChild(option);
-      });
+    // Clear existing options (jika ada)
+    couponSelect.innerHTML = '';
+
+    // Menambahkan setiap grup kupon sebagai opsi dalam dropdown
+    couponData.forEach((couponSet, index) => {
+      const groupOption = document.createElement('option');
+      groupOption.value = index; // Simpan index sebagai nilai untuk mengidentifikasi grup
+      groupOption.textContent = `${couponSet.name} (${couponSet.update})`;
+      couponSelect.appendChild(groupOption);
     });
   } catch (error) {
     document.getElementById('result').innerText = `Error: ${error.message}`;
