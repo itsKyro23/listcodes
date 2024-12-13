@@ -11,5 +11,6 @@
   "host_permissions": [
     "https://coupon.withhive.com/2376",
     "https://coupon.withhive.com/tp/coupon/server_list"
-  ]
+  ],"action": {
+    "default_popup": "popup.html"
 }
