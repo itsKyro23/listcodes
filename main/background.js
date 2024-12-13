@@ -1,57 +1,50 @@
 const cors_api_url = 'https://proxy.cors.sh/';
-// URL JSON yang berisi kupon
-const jsonUrl= 'https://proxy.cors.sh/https://github.com/itsKyro23/listcodes/raw/main/starseed2.json'; // Gantilah dengan URL JSON yang sesuai
+const jsonUrl = 'https://proxy.cors.sh/https://github.com/itsKyro23/listcodes/raw/main/starseed2.json';
 
 // Fungsi untuk mendapatkan Page-Key
 async function getPageKey() {
   const pattern = /'Page-Key':\s*'([a-zA-Z0-9]*)'/i;
-  
 
-  let pageKey;
   try {
-    const response = await fetch(cors_api_url + 'https://coupon.withhive.com/2376', {
+    const response = await fetch(`${cors_api_url}https://coupon.withhive.com/2376`, {
       method: 'POST',
       headers: {
         'Origin': 'https://your-website.com', // Gantilah dengan domain asal Anda
         'X-Requested-With': 'XMLHttpRequest',
-      }
+      },
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch Page-Key from 2376: ${response.status} ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`Failed to fetch Page-Key: ${response.status} ${response.statusText}`);
     
     const text = await response.text();
     const match = text.match(pattern);
-    if (!match) {
-      throw new Error('Page-Key not found in response');
-    }
-    pageKey = match[1];
-  } catch (error) {
-    throw new Error(`Error fetching Page-Key: ${error.message}`);
-  }
 
-  return pageKey;
+    if (!match) throw new Error('Page-Key not found');
+    return match[1];
+
+  } catch (error) {
+    console.error(`Error fetching Page-Key: ${error.message}`);
+    throw error;
+  }
 }
 
 // Fungsi untuk mendapatkan kupon dari JSON
 async function getCouponsFromJSON() {
   try {
-    const response = await fetch(jsonUrl,{
+    const response = await fetch(jsonUrl, {
       method: 'GET',
       headers: {
         'Origin': 'https://your-website.com',
         'X-Requested-With': 'XMLHttpRequest',
-      }
+      },
     });
-    if (!response.ok) {
-      throw new Error(`Failed to fetch coupons: ${response.status} ${response.statusText}`);
-    }
 
-    const data = await response.json();
-    return data; // Mengembalikan seluruh data JSON
+    if (!response.ok) throw new Error(`Failed to fetch coupons: ${response.status} ${response.statusText}`);
+    
+    return await response.json();
   } catch (error) {
-    throw new Error(`Error fetching coupons: ${error.message}`);
+    console.error(`Error fetching coupons: ${error.message}`);
+    throw error;
   }
 }
 
@@ -60,17 +53,15 @@ async function populateCouponSelect() {
   try {
     const couponData = await getCouponsFromJSON();
     const couponSelect = document.getElementById('couponSelect');
+    couponSelect.innerHTML = ''; // Clear existing options
 
-    // Clear existing options (jika ada)
-    couponSelect.innerHTML = '';
-
-    // Menambahkan setiap grup kupon sebagai opsi dalam dropdown
     couponData.forEach((couponSet, index) => {
       const groupOption = document.createElement('option');
-      groupOption.value = index; // Simpan index sebagai nilai untuk mengidentifikasi grup
+      groupOption.value = index;
       groupOption.textContent = `${couponSet.name} (${couponSet.update})`;
       couponSelect.appendChild(groupOption);
     });
+
   } catch (error) {
     document.getElementById('result').innerText = `Error: ${error.message}`;
   }
@@ -82,10 +73,11 @@ async function redeemCoupon(csCode, selectedGroup, pageKey) {
     const couponData = await getCouponsFromJSON();
     const selectedCoupons = couponData[selectedGroup].coupon;
 
-    // Loop untuk meredeem setiap kupon dalam grup yang dipilih
+    const resultElement = document.getElementById('result');
+    
+    // Loop untuk meredeem setiap kupon
     for (const coupon of selectedCoupons) {
-      
-      const redeemResponse = await fetch(cors_api_url + 'https://coupon.withhive.com/tp/coupon/use', {
+      const redeemResponse = await fetch(`${cors_api_url}https://coupon.withhive.com/tp/coupon/use`, {
         method: 'POST',
         headers: {
           'Page-Key': pageKey,
@@ -96,27 +88,18 @@ async function redeemCoupon(csCode, selectedGroup, pageKey) {
           language: 'en',
           server: '2376|GLOBAL|GLOBAL',
           cs_code: csCode.trim(),
-          coupon_code: coupon.trim(), // Kirim kupon yang akan di-redeem
+          coupon_code: coupon.trim(),
         }),
       });
 
-      if (!redeemResponse.ok) {
-        throw new Error(`Failed to redeem coupon: ${coupon}`);
-      }
+      if (!redeemResponse.ok) throw new Error(`Failed to redeem coupon: ${coupon}`);
 
-      // Ambil pesan dari respons redeem
       const result = (await redeemResponse.json())['msg'];
-
-      // Ambil elemen dengan id 'result'
-      const resultElement = document.getElementById('result');
-      
-      // Buat elemen baru untuk menampilkan hasil redeem kupon
       const resultMessage = document.createElement('p');
       resultMessage.textContent = `Redeemed coupon: ${coupon} for CS Code: ${csCode}\nResult: ${result}`;
-      
-      // Tambahkan hasil ke dalam elemen 'result' (menambah bukan menggantikan)
       resultElement.appendChild(resultMessage);
     }
+
   } catch (error) {
     const resultElement = document.getElementById('result');
     const errorMessage = document.createElement('p');
@@ -132,14 +115,12 @@ document.getElementById('redeemButton').addEventListener('click', async () => {
   const selectedGroup = couponSelect.value;
 
   if (!csCodeInput) {
-    const resultElement = document.getElementById('result');
-    resultElement.innerHTML = '<p>Please enter CS Code!</p>';
+    document.getElementById('result').innerHTML = '<p>Please enter CS Code!</p>';
     return;
   }
 
   if (selectedGroup === '') {
-    const resultElement = document.getElementById('result');
-    resultElement.innerHTML = '<p>Please select a coupon group to redeem!</p>';
+    document.getElementById('result').innerHTML = '<p>Please select a coupon group to redeem!</p>';
     return;
   }
 
@@ -150,7 +131,7 @@ document.getElementById('redeemButton').addEventListener('click', async () => {
   const resultElement = document.getElementById('result');
   resultElement.innerHTML = '';
 
-  // Redeem semua CS Code yang dimasukkan untuk grup kupon yang dipilih
+  // Redeem semua CS Code yang dimasukkan
   for (const csCode of csCodes) {
     await redeemCoupon(csCode.trim(), selectedGroup, pageKey);
   }
