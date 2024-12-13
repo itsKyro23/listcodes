@@ -18,7 +18,7 @@ async function getAdditionalInfo(csCodes) {
         return match[1];
       });
   } catch (error) {
-    throw new Error(`Error fetching Page-Key: ${error.message}`);
+    throw new Error(`Error fetching Page-Key2: ${error.message}`);
   }
 
   const results = [];
