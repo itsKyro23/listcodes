@@ -8,7 +8,8 @@
     "type": "module"
   },
   "permissions": ["storage", "scripting", "contextMenus"],
-  "host_permissions": ["https://coupon.withhive.com/2376"],
-  
-  }
+  "host_permissions": [
+    "https://coupon.withhive.com/2376",
+    "https://coupon.withhive.com/tp/coupon/server_list"
+  ]
 }
