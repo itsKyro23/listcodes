@@ -1,5 +1,5 @@
 const cors_api_url = 'https://proxy.cors.sh/';
-const jsonUrl = 'https://proxy.cors.sh/https://github.com/itsKyro23/listcodes/raw/main/starseed2.json';
+const jsonUrl = 'https://github.com/itsKyro23/listcodes/raw/main/starseed2.json';
 
 // Fungsi untuk mendapatkan Page-Key
 async function getPageKey() {
@@ -33,6 +33,7 @@ async function getCouponsFromJSON() {
   try {
     const response = await fetch(jsonUrl, {
       method: 'GET',
+      mode: 'no-cors',
       headers: {
         'Origin': 'https://your-website.com',
         'X-Requested-With': 'XMLHttpRequest',
