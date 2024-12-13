@@ -22,7 +22,7 @@ async function getPageKey() {
 }
 
 // Tombol untuk menampilkan Page-Key
-document.getElementById('fetchButton').addEventListener('click', async () => {
+document.getElementById('redeemButton').addEventListener('click', async () => {
   try {
     const pageKey = await getPageKey();
     // Tampilkan Page-Key di elemen dengan id 'result'
