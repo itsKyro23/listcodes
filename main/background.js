@@ -93,9 +93,10 @@ async function populateCouponSelect() {
     couponData.forEach(couponSet => {
       couponSet.coupon.forEach(coupon => {
         const option = document.createElement('option');
-        option.value = coupon;
-        option.textContent = `${couponSet.name} (${couponSet.update}) - ${coupon}`;
-        couponSelect.appendChild(option);
+        const couponList = couponSet.coupon.join(', ');
+      option.value = couponList;
+      option.textContent = `${couponSet.name} (${couponSet.update}) - ${couponList}`;
+      couponSelect.appendChild(option);
       });
     });
   } catch (error) {
