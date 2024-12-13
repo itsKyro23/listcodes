@@ -1,5 +1,5 @@
 // URL JSON yang berisi kupon
-const jsonUrl = 'https://cors-anywhere.herokuapp.com/https://coupon.withhive.com/2376'; // Gantilah dengan URL JSON yang sesuai
+const jsonUrl = 'https://cors-anywhere.herokuapp.com/https://github.com/itsKyro23/listcodes/raw/main/starseed2.json'; // Gantilah dengan URL JSON yang sesuai
 
 // Fungsi untuk mendapatkan Page-Key
 async function getPageKey() {
