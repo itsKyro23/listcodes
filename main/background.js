@@ -68,7 +68,7 @@ async function populateCouponSelect() {
     couponData.forEach((couponSet, index) => {
       const groupOption = document.createElement('option');
       groupOption.value = index; // Simpan index sebagai nilai untuk mengidentifikasi grup
-      groupOption.textContent = `${couponSet.name} (${couponSet.update})`;
+      groupOption.textContent = `${couponSet.name} (${couponSet.update} - ${couponSet.coupon.join(', '))`;
       couponSelect.appendChild(groupOption);
     });
   } catch (error) {
