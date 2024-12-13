@@ -9,7 +9,7 @@ async function getPageKey() {
   let pageKey;
   try {
     const response = await fetch(cors_api_url + 'https://coupon.withhive.com/2376', {
-      method: 'GET',
+      method: 'POST',
       headers: {
         'Origin': 'https://your-website.com', // Gantilah dengan domain asal Anda
         'X-Requested-With': 'XMLHttpRequest',
@@ -65,7 +65,13 @@ async function getAdditionalInfo(csCode, pageKey) {
 // Fungsi untuk mendapatkan kupon dari JSON
 async function getCouponsFromJSON() {
   try {
-    const response = await fetch(jsonUrl);
+    const response = await fetch(jsonUrl,{
+      method: 'GET',
+    headers: {
+      'Origin': 'https://your-website.com',
+      'X-Requested-With': 'XMLHttpRequest',
+    }
+    });
     if (!response.ok) {
       throw new Error(`Failed to fetch coupons: ${response.status} ${response.statusText}`);
     }
