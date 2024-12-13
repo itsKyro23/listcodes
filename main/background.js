@@ -83,6 +83,9 @@ async function populateCouponSelect() {
     const couponData = await getCouponsFromJSON();
     const couponSelect = document.getElementById('couponSelect');
 
+    // Menghapus opsi lama sebelum menambahkan yang baru
+    couponSelect.innerHTML = '<option value="">Select Coupon</option>';
+
     // Menambahkan semua kupon ke dropdown
     couponData.forEach(couponSet => {
       couponSet.coupon.forEach(coupon => {
@@ -134,4 +137,3 @@ document.getElementById('redeemButton').addEventListener('click', async () => {
 
 // Populasi dropdown kupon saat halaman dimuat
 window.onload = populateCouponSelect;
-    
