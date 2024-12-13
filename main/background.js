@@ -89,7 +89,7 @@ async function redeemCoupon(csCode, selectedGroup, pageKey) {
           language: 'en',
           server: '2376|GLOBAL|GLOBAL',
           cs_code: csCode.trim(),
-          coupon_code: coupon.trim(),
+          coupon_code: 'TGS24STARSEED',
         }),
       });
 
