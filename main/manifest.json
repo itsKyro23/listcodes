@@ -10,7 +10,10 @@
   "permissions": ["storage", "scripting", "contextMenus"],
   "host_permissions": [
     "https://coupon.withhive.com/2376",
-    "https://coupon.withhive.com/tp/coupon/server_list"
-  ],"action": {
+    "https://coupon.withhive.com/tp/coupon/server_list",
+    "https://thingproxy.freeboard.io/fetch/*"  // Menambahkan izin untuk mengakses proxy
+  ],
+  "action": {
     "default_popup": "index.html"
+  }
 }
