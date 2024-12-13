@@ -1,7 +1,7 @@
 // Fungsi untuk mendapatkan additional info
 async function getAdditionalInfo(csCodes) {
   const pattern = /'Page-Key':\s*'([a-zA-Z0-9]*)'/i;
-  const cors_api_url = 'https://corsproxy.io/?';  // Ganti dengan proxy CORS alternatif
+  const cors_api_url = 'https://thingproxy.freeboard.io/fetch/';  // Ganti dengan proxy CORS alternatif
 
   let pageKey;
   try {
