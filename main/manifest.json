@@ -1,0 +1,14 @@
+{
+  "name": "StarSeed Coupon",
+  "description": ".",
+  "version": "1.3",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "permissions": ["storage", "scripting", "contextMenus"],
+  "host_permissions": ["https://coupon.withhive.com/1614"],
+  
+  }
+}
