@@ -8,10 +8,17 @@ async function getAdditionalInfo(csCodes) {
   let pageKey;
   try {
     // Ambil Page-Key menggunakan proxy
-    const response = await fetch(`${PROXY_URL}https://coupon.withhive.com/2376`);
+    const response = await fetch(`${PROXY_URL}https://coupon.withhive.com/2376`, {
+      headers: {
+        "User-Agent": "Mozilla/5.0",  // Menambahkan header untuk mensimulasikan permintaan dari browser
+        "Accept": "text/html",         // Menambahkan header untuk menerima HTML
+      },
+    });
+    
     if (!response.ok) {
       throw new Error(`Failed to fetch Page-Key from 2376: ${response.status} ${response.statusText}`);
     }
+
     const text = await response.text();
     const match = text.match(pattern);
     if (!match) {
@@ -31,6 +38,8 @@ async function getAdditionalInfo(csCodes) {
         method: "POST",
         headers: {
           "Page-Key": pageKey,
+          "User-Agent": "Mozilla/5.0",  // Menambahkan header untuk mensimulasikan permintaan dari browser
+          "Accept": "application/json",  // Memastikan server mengembalikan response dalam format JSON
         },
         body: JSON.stringify({
           language: "en",
