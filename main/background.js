@@ -84,8 +84,8 @@ async function redeemCoupon(csCode, selectedGroup, pageKey) {
 
     // Loop untuk meredeem setiap kupon dalam grup yang dipilih
     for (const coupon of selectedCoupons) {
-      const cors_api_url = 'https://cors-anywhere.herokuapp.com/';
-      const redeemResponse = await fetch(cors_api_url + 'https://coupon.withhive.com/tp/coupon/redeem', {
+      
+      const redeemResponse = await fetch(cors_api_url + 'https://coupon.withhive.com/tp/coupon/use', {
         method: 'POST',
         headers: {
           'Page-Key': pageKey,
