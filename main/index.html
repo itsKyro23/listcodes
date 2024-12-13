@@ -3,83 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>STAR SEED Coupon</title>
+  <title>Coupon Redeem</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background: #f0f0f0;
+      margin: 20px;
     }
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-    .card {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      width: 100%;
-      max-width: 400px;
-      padding: 20px;
-      text-align: center;
-    }
-    .card h1 {
-      font-size: 20px;
-      margin-bottom: 20px;
-      color: #333;
-    }
-    .input-container {
-      margin-bottom: 20px;
-    }
-    .input-container input, select {
-      width: 100%;
+    label, select, input, button {
+      margin: 10px 0;
       padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
       font-size: 16px;
     }
-    .button {
-      background: #007BFF;
-      color: #fff;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
-      width: 100%;
-    }
-    .button:hover {
-      background: #0056b3;
-    }
-    .result {
-      margin-top: 10px;
-      font-size: 14px;
-      color: #333;
+    #result {
+      margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="card">
-      <h1>Redeem Star Seed Coupon</h1>
-      <div class="input-container">
-        <input type="text" id="csCodeInput" placeholder="Enter CS Codes (comma-separated)" />
-      </div>
-      <div class="input-container">
-        <select id="couponSelect">
-          <option value="">Select Coupon</option>
-        </select>
-      </div>
-      <button class="button" id="redeemButton">Redeem</button>
-      <p class="result" id="result"></p>
-    </div>
-  </div>
+  <h1>Coupon Redeem</h1>
+
+  <!-- Input untuk memasukkan CS Code -->
+  <label for="csCodeInput">Enter CS Code(s) (comma separated):</label>
+  <input type="text" id="csCodeInput" placeholder="e.g. ABC123, XYZ456">
+  
+  <!-- Dropdown untuk memilih kupon -->
+  <label for="couponSelect">Select Coupon:</label>
+  <select id="couponSelect">
+    <option value="">Select Coupon</option>
+  </select>
+  
+  <!-- Tombol untuk melakukan redeem -->
+  <button id="redeemButton">Redeem Coupon</button>
+
+  <!-- Menampilkan hasil redeem -->
+  <div id="result"></div>
+
+  <!-- Menyertakan JavaScript -->
   <script src="background.js"></script>
 </body>
 </html>
