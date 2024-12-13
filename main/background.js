@@ -33,35 +33,6 @@ async function getPageKey() {
   return pageKey;
 }
 
-// Fungsi untuk mendapatkan info tambahan menggunakan CS Code
-async function getAdditionalInfo(csCode, pageKey) {
-  const cors_api_url = 'https://cors-anywhere.herokuapp.com/';
-  const serverListResponse = await fetch(cors_api_url + 'https://coupon.withhive.com/tp/coupon/server_list', {
-    method: 'POST',
-    headers: {
-      'Page-Key': pageKey,
-      'Origin': 'https://your-website.com',
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-    body: JSON.stringify({
-      language: 'en',
-      server: '2376|GLOBAL|GLOBAL',
-      cs_code: csCode.trim(),
-    }),
-  });
-
-  if (!serverListResponse.ok) {
-    throw new Error(`Failed to fetch server list for CS Code ${csCode}: ${serverListResponse.status} ${serverListResponse.statusText}`);
-  }
-
-  const data = await serverListResponse.json();
-  if (!data.serverList || !data.serverList['0'] || !data.serverList['0'].additionalinfo) {
-    throw new Error(`Additional info not found for CS Code ${csCode}`);
-  }
-
-  return data.serverList['0'].additionalinfo;
-}
-
 // Fungsi untuk mendapatkan kupon dari JSON
 async function getCouponsFromJSON() {
   try {
@@ -112,14 +83,35 @@ async function redeemCoupon(csCode, selectedGroup, pageKey) {
 
     // Loop untuk meredeem setiap kupon dalam grup yang dipilih
     for (const coupon of selectedCoupons) {
-      const additionalInfo = await getAdditionalInfo(csCode, pageKey);
+      const cors_api_url = 'https://cors-anywhere.herokuapp.com/';
+      const redeemResponse = await fetch(cors_api_url + 'https://coupon.withhive.com/tp/coupon/redeem', {
+        method: 'POST',
+        headers: {
+          'Page-Key': pageKey,
+          'Origin': 'https://your-website.com',
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: JSON.stringify({
+          language: 'en',
+          server: '2376|GLOBAL|GLOBAL',
+          cs_code: csCode.trim(),
+          coupon_code: coupon.trim(), // Kirim kupon yang akan di-redeem
+        }),
+      });
+
+      if (!redeemResponse.ok) {
+        throw new Error(`Failed to redeem coupon: ${coupon}`);
+      }
+
+      // Ambil pesan dari respons redeem
+      const result = (await redeemResponse.json())['msg'];
 
       // Ambil elemen dengan id 'result'
       const resultElement = document.getElementById('result');
       
       // Buat elemen baru untuk menampilkan hasil redeem kupon
       const resultMessage = document.createElement('p');
-      resultMessage.textContent = `Successfully redeemed coupon: ${coupon} for CS Code: ${csCode}\nAdditional Info: ${additionalInfo}`;
+      resultMessage.textContent = `Redeemed coupon: ${coupon} for CS Code: ${csCode}\nResult: ${result}`;
       
       // Tambahkan hasil ke dalam elemen 'result' (menambah bukan menggantikan)
       resultElement.appendChild(resultMessage);
@@ -140,7 +132,7 @@ document.getElementById('redeemButton').addEventListener('click', async () => {
 
   if (!csCodeInput) {
     const resultElement = document.getElementById('result');
-    resultElement.innerHTML = '<p>Please enter CS Codes!</p>';
+    resultElement.innerHTML = '<p>Please enter CS Code!</p>';
     return;
   }
 
