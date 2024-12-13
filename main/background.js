@@ -2,23 +2,21 @@
 async function getAdditionalInfo(csCodes) {
   const pattern = /'Page-Key':\s*'([a-zA-Z0-9]*)'/i;
 
-  // Ambil Page-Key
   let pageKey;
   try {
-    pageKey = await fetch('https://coupon.withhive.com/2376')
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch Page-Key from 2376: ${response.status} ${response.statusText}`);
-        }
-        const text = await response.text();
-        const match = text.match(pattern);
-        if (!match) {
-          throw new Error('Page-Key not found in response from 2376');
-        }
-        return match[1];
-      });
+    // Ambil Page-Key
+    const response = await fetch('https://coupon.withhive.com/2376');
+    if (!response.ok) {
+      throw new Error(`Failed to fetch Page-Key from 2376: ${response.status} ${response.statusText}`);
+    }
+    const text = await response.text();
+    const match = text.match(pattern);
+    if (!match) {
+      throw new Error('Page-Key not found in response from 2376');
+    }
+    pageKey = match[1];
   } catch (error) {
-    throw new Error(`Error fetching Page-Key2: ${error.message}`);
+    throw new Error(`Error fetching Page-Key: ${error.message}`);
   }
 
   const results = [];
@@ -26,7 +24,7 @@ async function getAdditionalInfo(csCodes) {
   for (const csCode of csCodes) {
     try {
       // Ambil ADDITIONAL_INFO berdasarkan CS Code
-      const ADDITIONAL_INFO = await fetch('https://coupon.withhive.com/tp/coupon/server_list', {
+      const serverListResponse = await fetch('https://coupon.withhive.com/tp/coupon/server_list', {
         method: 'POST',
         headers: {
           'Page-Key': pageKey,
@@ -36,17 +34,18 @@ async function getAdditionalInfo(csCodes) {
           server: '2376|GLOBAL|GLOBAL',
           cs_code: csCode.trim(),
         }),
-      }).then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`Failed to fetch server_list for CS Code ${csCode.trim()}: ${response.status} ${response.statusText}`);
-        }
-        const data = await response.json();
-        if (!data.serverList || !data.serverList['0'] || !data.serverList['0'].additionalinfo) {
-          throw new Error(`Additional info not found for CS Code ${csCode.trim()}`);
-        }
-        return data.serverList['0'].additionalinfo;
       });
+      
+      if (!serverListResponse.ok) {
+        throw new Error(`Failed to fetch server_list for CS Code ${csCode.trim()}: ${serverListResponse.status} ${serverListResponse.statusText}`);
+      }
 
+      const data = await serverListResponse.json();
+      if (!data.serverList || !data.serverList['0'] || !data.serverList['0'].additionalinfo) {
+        throw new Error(`Additional info not found for CS Code ${csCode.trim()}`);
+      }
+
+      const ADDITIONAL_INFO = data.serverList['0'].additionalinfo;
       results.push(`CS Code: ${csCode.trim()} - Additional Info: ${ADDITIONAL_INFO}`);
     } catch (error) {
       results.push(`CS Code: ${csCode.trim()} - Error: ${error.message}`);
