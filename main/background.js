@@ -3,7 +3,7 @@ async function getPageKey() {
 
   try {
     // Ambil Page-Key
-    const response = await fetch('https://coupon.withhive.com/2376');
+    const response = await fetch('https://cors-anywhere.herokuapp.com/http://coupon.withhive.com/2376');
     if (!response.ok) {
       throw new Error(`Failed to fetch Page-Key: ${response.status} ${response.statusText}`);
     }
