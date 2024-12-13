@@ -67,10 +67,10 @@ async function getCouponsFromJSON() {
   try {
     const response = await fetch(jsonUrl,{
       method: 'GET',
-    headers: {
-      'Origin': 'https://your-website.com',
-      'X-Requested-With': 'XMLHttpRequest',
-    }
+      headers: {
+        'Origin': 'https://your-website.com',
+        'X-Requested-With': 'XMLHttpRequest',
+      }
     });
     if (!response.ok) {
       throw new Error(`Failed to fetch coupons: ${response.status} ${response.statusText}`);
@@ -105,12 +105,30 @@ async function populateCouponSelect() {
 }
 
 // Fungsi untuk redeem kupon yang dipilih
-async function redeemCoupon(csCode, coupon, pageKey) {
+async function redeemCoupon(csCode, selectedGroup, pageKey) {
   try {
-    const additionalInfo = await getAdditionalInfo(csCode, pageKey);
-    document.getElementById('result').innerText = `Successfully redeemed coupon: ${coupon} for CS Code: ${csCode}\nAdditional Info: ${additionalInfo}`;
+    const couponData = await getCouponsFromJSON();
+    const selectedCoupons = couponData[selectedGroup].coupon;
+
+    // Loop untuk meredeem setiap kupon dalam grup yang dipilih
+    for (const coupon of selectedCoupons) {
+      const additionalInfo = await getAdditionalInfo(csCode, pageKey);
+
+      // Ambil elemen dengan id 'result'
+      const resultElement = document.getElementById('result');
+      
+      // Buat elemen baru untuk menampilkan hasil redeem kupon
+      const resultMessage = document.createElement('p');
+      resultMessage.textContent = `Successfully redeemed coupon: ${coupon} for CS Code: ${csCode}\nAdditional Info: ${additionalInfo}`;
+      
+      // Tambahkan hasil ke dalam elemen 'result' (menambah bukan menggantikan)
+      resultElement.appendChild(resultMessage);
+    }
   } catch (error) {
-    document.getElementById('result').innerText = `Error redeeming coupon: ${error.message}`;
+    const resultElement = document.getElementById('result');
+    const errorMessage = document.createElement('p');
+    errorMessage.textContent = `Error redeeming coupon: ${error.message}`;
+    resultElement.appendChild(errorMessage);
   }
 }
 
@@ -118,24 +136,30 @@ async function redeemCoupon(csCode, coupon, pageKey) {
 document.getElementById('redeemButton').addEventListener('click', async () => {
   const csCodeInput = document.getElementById('csCodeInput').value;
   const couponSelect = document.getElementById('couponSelect');
-  const selectedCoupon = couponSelect.value;
+  const selectedGroup = couponSelect.value;
 
   if (!csCodeInput) {
-    document.getElementById('result').innerText = 'Please enter CS Codes!';
+    const resultElement = document.getElementById('result');
+    resultElement.innerHTML = '<p>Please enter CS Codes!</p>';
     return;
   }
 
-  if (!selectedCoupon) {
-    document.getElementById('result').innerText = 'Please select a coupon to redeem!';
+  if (selectedGroup === '') {
+    const resultElement = document.getElementById('result');
+    resultElement.innerHTML = '<p>Please select a coupon group to redeem!</p>';
     return;
   }
 
   const csCodes = csCodeInput.split(',');
   const pageKey = await getPageKey();
 
-  // Redeem semua CS Code yang dimasukkan
+  // Clear previous result
+  const resultElement = document.getElementById('result');
+  resultElement.innerHTML = '';
+
+  // Redeem semua CS Code yang dimasukkan untuk grup kupon yang dipilih
   for (const csCode of csCodes) {
-    await redeemCoupon(csCode.trim(), selectedCoupon, pageKey);
+    await redeemCoupon(csCode.trim(), selectedGroup, pageKey);
   }
 });
 
