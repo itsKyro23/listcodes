@@ -1,15 +1,23 @@
 // Fungsi untuk mendapatkan additional info
 async function getAdditionalInfo(csCodes) {
   const pattern = /'Page-Key':\s*'([a-zA-Z0-9]*)'/i;
-  const cors_api_url = 'https://thingproxy.freeboard.io/fetch/';  // Ganti dengan proxy CORS alternatif
+  const cors_api_url = 'https://cors-anywhere.herokuapp.com/';  // Ganti dengan proxy CORS yang digunakan
 
   let pageKey;
   try {
     // Ambil Page-Key dengan menggunakan CORS proxy
-    const response = await fetch(cors_api_url + 'https://coupon.withhive.com/2376');
+    const response = await fetch(cors_api_url + 'https://coupon.withhive.com/2376', {
+      method: 'GET',
+      headers: {
+        'Origin': 'https://your-website.com', // Gantilah dengan domain asal Anda
+        'X-Requested-With': 'XMLHttpRequest', // Header ini diperlukan
+      }
+    });
+
     if (!response.ok) {
       throw new Error(`Failed to fetch Page-Key from 2376: ${response.status} ${response.statusText}`);
     }
+    
     const text = await response.text();
     const match = text.match(pattern);
     if (!match) {
@@ -21,14 +29,16 @@ async function getAdditionalInfo(csCodes) {
   }
 
   const results = [];
-  
+
+  // Mengambil info tambahan berdasarkan CS Codes
   for (const csCode of csCodes) {
     try {
-      // Ambil ADDITIONAL_INFO berdasarkan CS Code
       const serverListResponse = await fetch(cors_api_url + 'https://coupon.withhive.com/tp/coupon/server_list', {
         method: 'POST',
         headers: {
           'Page-Key': pageKey,
+          'Origin': 'https://your-website.com', // Sesuaikan dengan domain Anda
+          'X-Requested-With': 'XMLHttpRequest', // Header ini diperlukan
         },
         body: JSON.stringify({
           language: 'en',
