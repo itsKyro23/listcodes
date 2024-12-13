@@ -3,7 +3,7 @@ async function redeemCoupons(coupons, csCodes) {
   const pattern = /'Page-Key':\s*'([a-zA-Z0-9]*)'/i;
 
   // Ambil Page-Key
-  const pageKey = await fetch('https://coupon.withhive.com/1614')
+  const pageKey = await fetch('https://coupon.withhive.com/2376')
     .then(async (response) => {
       const text = await response.text();
       return text.match(pattern)[1];
@@ -17,8 +17,8 @@ async function redeemCoupons(coupons, csCodes) {
         'Page-Key': pageKey,
       },
       body: JSON.stringify({
-        language: 'ko',
-        server: '1614|KR|KR',
+        language: 'en',
+        server: '2376|GLOBAL|GLOBAL',
         cs_code: csCode.trim(),
       }),
     }).then(async (response) => {
@@ -33,8 +33,8 @@ async function redeemCoupons(coupons, csCodes) {
           'Page-Key': pageKey,
         },
         body: JSON.stringify({
-          language: 'ko',
-          server: '1614|KR|KR',
+          language: 'en',
+          server: '2376|GLOBAL|GLOBAL',
           cs_code: csCode.trim(),
           coupon: coupon.trim(),
           additional_info: ADDITIONAL_INFO,
